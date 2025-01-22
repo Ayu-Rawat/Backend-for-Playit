@@ -249,13 +249,17 @@ const changeCurrentUserPassword = asyncHandler(async(req,res) => {
 
     return res
         .status(200)
-        .json(200,{},"Password is updated successfully")
+        .json(
+            new ApiResponse(200,{}, "Password changed successfully")
+        )
 })
 
 const getCurrentUser = asyncHandler(async(req,res) => {
     return res
         .status(200)
-        .json(200,req.user,"current user fetched correctly")
+        .json(
+            new ApiResponse(200,req.user,"User fetched successfully")
+        )
 })
 
 const updateUserAvatar = asyncHandler(async(req,res) => {

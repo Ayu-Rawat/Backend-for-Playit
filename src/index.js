@@ -18,6 +18,9 @@ connectDB()
     console.log("MONGO DB connection failed !!!", error)
 })
 
+app.get("/", (req, res) => {
+    res.send("Welcome to the Playit Backend API! Visit /api/v1/ for available endpoints.");
+});
 
 
 

@@ -39,4 +39,8 @@ app.use("/api/v1/dashboard", dashboardRouter)
 app.use("/api/v1/dashboard", dashboardRouter)
 app.use("/api/v1/healthcheck", healthcheckRouter)
 
+app.get("/", (req, res) => {
+    res.sendFile("index.html")
+})
+
 export {app}

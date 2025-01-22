@@ -4,7 +4,7 @@ import {
     deleteCommunity,
     getUserCommunities,
     updateCommunity,
-} from "../controllers/tweet.controller.js"
+} from "../controllers/community.controller.js"
 import {verifyJWT} from "../middlewares/auth.middleware.js"
 
 const communityRouter = Router();

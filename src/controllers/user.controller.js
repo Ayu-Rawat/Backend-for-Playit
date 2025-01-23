@@ -192,7 +192,7 @@ const logoutUser = asyncHandler(async(req,res) => {
 
 const refreshAccessToken = asyncHandler(async(req,res) =>{
 try {
-    const incomingRefreshToken = req.Cookie.refreshToken || req.body.refreshToken;
+    const incomingRefreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
 
     if (!incomingRefreshToken) {
         throw new ApiError(401, "Unauthorized request!");
@@ -222,6 +222,8 @@ try {
 
     return res
         .status(200)
+        .clearCookie("accessToken")
+        .clearCookie("refreshToken")
         .cookie("accessToken", newAccessToken, options)
         .cookie("refreshToken", newRefreshToken, options)
         .json(
@@ -237,6 +239,14 @@ try {
 
 const changeCurrentUserPassword = asyncHandler(async(req,res) => {
     const {oldPassword,newPassword} = req.body
+
+    if (!req.user) {
+        throw new ApiError(401, "Unauthorized request");
+    }
+
+    if (!oldPassword || !newPassword) {
+        throw new ApiError(400, "Old password and new password are required");
+    }
 
     const user = await User.findById(req.user._id)
     const isPasswordCorrect =await user.isPasswordCorrect(oldPassword)
@@ -300,7 +310,6 @@ try {
 const updateUserCoverImage = asyncHandler(async(req,res) => {
     try {
         const coverImageLocalPath = req.file?.path
-    
         if (!coverImageLocalPath) {
             throw new ApiError(400, "Cover image file is missing")
         }
@@ -336,7 +345,7 @@ const getUserChannelProfile = asyncHandler(async(req,res) => {
     const {username} = req.params
 
     if(!username?.trim()){
-        throw new ApiError(400,'username is does not exist or inccorect')
+        throw new ApiError(400,'Username does not exist or is incorrect')
     }
 
     const channel = await User.aggregate([
@@ -364,7 +373,7 @@ const getUserChannelProfile = asyncHandler(async(req,res) => {
         {
             $addFields:{
                 subscribersCount:{
-                    $size:"$subscribes"
+                    $size:"$subscribers"
                 },
                 channelsSubscribedToCount:{
                     $size:"$subscribedTo"
@@ -383,7 +392,7 @@ const getUserChannelProfile = asyncHandler(async(req,res) => {
                 fullName: 1,
                 username: 1,
                 subscribersCount: 1,
-                channelsSubscribedToCoun: 1,
+                channelsSubscribedToCount: 1,
                 coverImage: 1,
                 avatar: 1,
                 isSubscribed: 1,
@@ -392,7 +401,7 @@ const getUserChannelProfile = asyncHandler(async(req,res) => {
     ])
 
     if(!channel?.length){
-        throw new ApiError(404, "channel does not exist")
+        throw new ApiError(404, `channel does not exist${username}`)
     }
 
     return res
@@ -406,15 +415,15 @@ const getWatchHistory = asyncHandler(async(req,res) => {
     const user = await User.aggregate([
         {
             $match:{
-                _id: mongoose.Types.ObjectId.createFromTime(req.user._id)
+                _id: new mongoose.Types.ObjectId(req.user?._id)
             }
         },
         {
             $lookup:{
                 from:"Video",
-                localField:"watchHistry",
+                localField:"watchHistory",
                 foreignField:"_id",
-                as:"watchHistry",
+                as:"watchHistory",
                 pipeline:[
                     {
                         $lookup:{
@@ -448,7 +457,7 @@ const getWatchHistory = asyncHandler(async(req,res) => {
     return res
         .status(200)
         .json(
-            new ApiResponse(200,user[0].watchHistory,"Watch histry is fetched successfully")
+            new ApiResponse(200,user[0].watchHistory,"Watch history is fetched successfully")
         )
 })
 

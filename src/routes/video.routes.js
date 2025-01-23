@@ -15,8 +15,8 @@ videoRouter.use(verifyJWT);
 
 videoRouter
     .route("/")
-    .get(getAllVideos)
-    .post(
+    .get(verifyJWT,getAllVideos)
+    .post(verifyJWT,
         upload.fields([
             {
                 name: "videoFile",

@@ -9,7 +9,7 @@ const dashboardRouter = Router();
 
 dashboardRouter.use(verifyJWT);
 
-dashboardRouter.route("/stats").get(verifyJWT,getChannelStats);
-dashboardRouter.route("/videos").get(verifyJWT,getChannelVideos);
+dashboardRouter.route("/stats").get(getChannelStats);
+dashboardRouter.route("/videos").get(getChannelVideos);
 
 export default dashboardRouter

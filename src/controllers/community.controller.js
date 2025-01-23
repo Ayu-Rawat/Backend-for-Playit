@@ -7,6 +7,16 @@ import {asyncHandler} from "../utils/asyncHandler.js"
 
 const createCommunity = asyncHandler(async (req, res) => {
     //TODO: create tweet
+    const {content} = req.body
+
+    const community = await Community.create({
+        content,
+        owner: req.user._id
+    }) 
+    
+    return res
+        .status(201)
+        .json(new ApiResponse(201,community,"Community created successfully"))
 })
 
 const getUserCommunities = asyncHandler(async (req, res) => {

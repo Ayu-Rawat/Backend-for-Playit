@@ -15,8 +15,8 @@ videoRouter.use(verifyJWT);
 
 videoRouter
     .route("/")
-    .get(verifyJWT,getAllVideos)
-    .post(verifyJWT,
+    .get(getAllVideos)
+    .post(
         upload.fields([
             {
                 name: "videoFile",
@@ -33,11 +33,11 @@ videoRouter
 
 videoRouter
 .route("/:videoId")
-.get(verifyJWT,getVideoById)
-.delete(verifyJWT,deleteVideo)
-.patch(verifyJWT,upload.single("thumbnail"), updateVideo);
+.get(getVideoById)
+.delete(deleteVideo)
+.patch(upload.single("thumbnail"), updateVideo);
 
-videoRouter.route("/toggle/publish/:videoId").patch(verifyJWT,togglePublishStatus);
+videoRouter.route("/toggle/publish/:videoId").patch(togglePublishStatus);
 
 
 export default videoRouter

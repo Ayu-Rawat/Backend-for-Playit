@@ -14,14 +14,14 @@ const playlistRouter = Router();
 
 playlistRouter.use(verifyJWT);
 
-playlistRouter.route("/").post(verifyJWT,createPlaylist)
+playlistRouter.route("/").post(createPlaylist)
 playlistRouter
 .route("/:playlistId")
-.get(verifyJWT,getPlaylistById)
-.patch(verifyJWT,updatePlaylist)
-.delete(verifyJWT,deletePlaylist);
-playlistRouter.route("/add/:videoId/:playlistId").patch(verifyJWT,addVideoToPlaylist);
-playlistRouter.route("/remove/:videoId/:playlistId").patch(verifyJWT,removeVideoFromPlaylist);
-playlistRouter.route("/user/:userId").get(verifyJWT,getUserPlaylists);
+.get(getPlaylistById)
+.patch(updatePlaylist)
+.delete(deletePlaylist);
+playlistRouter.route("/add/:videoId/:playlistId").patch(addVideoToPlaylist);
+playlistRouter.route("/remove/:videoId/:playlistId").patch(removeVideoFromPlaylist);
+playlistRouter.route("/user/:userId").get(getUserPlaylists);
 
 export default playlistRouter

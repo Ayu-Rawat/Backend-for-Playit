@@ -15,6 +15,18 @@ const getAllVideos = asyncHandler(async (req, res) => {
 const publishAVideo = asyncHandler(async (req, res) => {
     const { title, description} = req.body
     // TODO: get video, upload to cloudinary, create video
+    const videoUrl = req.files?.videoFile[0]?.path
+    const thumbnailUrl = req.files?.thumbnail[0]?.path
+
+    if (!thumbnailUrl || !videoUrl) {
+        throw new ApiError(400, "Bad Request", "Please provide both video and thumbnail")
+    }
+
+    if (!title || !description) {
+        throw new ApiError(400, "Bad Request", "Please provide title and description")
+    }
+
+    
 })
 
 const getVideoById = asyncHandler(async (req, res) => {

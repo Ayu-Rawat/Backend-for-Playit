@@ -11,7 +11,7 @@ const commentRouter = Router();
 
 commentRouter.use(verifyJWT);
 
-commentRouter.route("/c/:videoId").get(verifyJWT,getVideoComments).post(verifyJWT,addComment);
-commentRouter.route("/c/:commentId").delete(verifyJWT,deleteComment).patch(verifyJWT,updateComment);
+commentRouter.route("/c/:videoId").get(getVideoComments).post(addComment);
+commentRouter.route("/c/:commentId").delete(deleteComment).patch(updateComment);
 
 export default commentRouter

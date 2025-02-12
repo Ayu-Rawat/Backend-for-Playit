@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser'
 const app = express()
 
 app.use(cors({
-    origin: '*',
+    origin: 'https://playit.ayush.it.com/',
     credentials:true
 }))
 
